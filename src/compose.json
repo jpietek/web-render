@@ -1,0 +1,73 @@
+{
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 60,
+    "duration": 30,
+    "background": "#030305"
+  },
+  "recording": {
+    "duration": 10,
+    "fps": 30,
+    "videoBitsPerSecond": 8000000,
+    "codec": "vp9"
+  },
+  "videos": [
+    {
+      "id": "bunny",
+      "url": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "x": 0,
+      "y": 0,
+      "width": 0.5,
+      "height": 0.5,
+      "crop": [0.0, 0.0, 0.5, 0.5],
+      "zoom": 1.5,
+      "rotationDegrees": -10,
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "google",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+      "x": 0.5,
+      "y": 0,
+      "width": 0.5,
+      "height": 0.5,
+      "crop": [0.4, 0.0, 0.9, 0.4],
+      "zoom": 2.0,
+      "rotationDegrees": 7,
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "sintel",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+      "x": 0,
+      "y": 0.5,
+      "width": 0.5,
+      "height": 0.5,
+      "crop": [0.0, 0.5, 0.4, 1.0],
+      "zoom": 1.2,
+      "rotationDegrees": -5,
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "tears",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "x": 0.5,
+      "y": 0.5,
+      "width": 0.5,
+      "height": 0.5,
+      "crop": [0.3, 0.3, 0.8, 0.8],
+      "zoom": 2.5,
+      "rotationDegrees": 12,
+      "time": { "in": 0, "out": 60 }
+    }
+  ],
+  "overlayPages": [],
+  "htmlOverlay": {
+    "id": "singular",
+    "url": "https://app.singular.live/output/6W76ei5ZNekKkYhe8nw5o8/Output?aspect=16:9",
+    "alpha": 1.0,
+    "time": { "in": 0, "out": 30 }
+  }
+}
+
