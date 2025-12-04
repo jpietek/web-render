@@ -1,0 +1,175 @@
+{
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 60,
+    "duration": 60,
+    "background": "#030305"
+  },
+  "videos": [
+    {
+      "id": "big-buck-1",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "x": 0.0,
+      "y": 0.0,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "elephants-dream",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "x": 0.25,
+      "y": 0.0,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "for-bigger-escapes",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      "x": 0.5,
+      "y": 0.0,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "for-bigger-blazes",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "x": 0.75,
+      "y": 0.0,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "for-bigger-joyrides",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+      "x": 0.0,
+      "y": 0.25,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "for-bigger-meltdowns",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+      "x": 0.25,
+      "y": 0.25,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "for-bigger-fun",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+      "x": 0.5,
+      "y": 0.25,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "sintel",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+      "x": 0.75,
+      "y": 0.25,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "tears-of-steel",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+      "x": 0.0,
+      "y": 0.5,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "subaru-outback",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
+      "x": 0.25,
+      "y": 0.5,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "volkswagen-gti",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
+      "x": 0.5,
+      "y": 0.5,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "we-are-going-on-bullrun",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
+      "x": 0.75,
+      "y": 0.5,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "what-car-for-a-grand",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
+      "x": 0.0,
+      "y": 0.75,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "for-bigger-escapes-2",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      "x": 0.25,
+      "y": 0.75,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "for-bigger-blazes-2",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "x": 0.5,
+      "y": 0.75,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    },
+    {
+      "id": "big-buck-2",
+      "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "x": 0.75,
+      "y": 0.75,
+      "width": 0.25,
+      "height": 0.25,
+      "crop": [0, 0, 1, 1],
+      "time": { "in": 0, "out": 60 }
+    }
+  ],
+  "overlayPages": [],
+  "htmlOverlay": null
+}
+
+

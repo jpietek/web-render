@@ -62,7 +62,37 @@
       "time": { "in": 0, "out": 60 }
     }
   ],
-  "overlayPages": [],
+  "overlayPages": [
+    {
+      "id": "webgpuOverlay",
+      "layers": [
+        {
+          "id": "pngLowerThird",
+          "type": "image",
+          "url": "./overlay.png",
+          "x": 0.0,
+          "y": 0.8,
+          "width": 1.0,
+          "height": 0.2,
+          "alpha": 1.0,
+          "time": { "in": 0, "out": 60 },
+          "zIndex": 100
+        },
+        {
+          "id": "webmBug",
+          "type": "video",
+          "url": "./overlay.webm",
+          "x": 0.8,
+          "y": 0.0,
+          "width": 0.2,
+          "height": 0.2,
+          "alpha": 1.0,
+          "time": { "in": 0, "out": 60 },
+          "zIndex": 110
+        }
+      ]
+    }
+  ],
   "htmlOverlay": {
     "id": "singular",
     "url": "https://app.singular.live/output/6W76ei5ZNekKkYhe8nw5o8/Output?aspect=16:9",

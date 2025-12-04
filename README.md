@@ -12,18 +12,28 @@ This folder contains a minimal browser demo that:
 
 ## Running Locally
 
-1. Serve this directory over HTTPS (required for WebGPU & cross-origin MP4s). For development you can use [`mkcert`](https://github.com/FiloSottile/mkcert) certificates or rely on Chrome's `--allow-insecure-localhost`.
+1. Install `node` / `npm` if you don't already have them, then install `http-server` (this will also give you `npx` on most platforms):
+
+   ```bash
+   npm install -g http-server
+   ```
+
+2. Serve this directory over HTTPS (required for WebGPU & cross-origin MP4s). For development you can use [`mkcert`](https://github.com/FiloSottile/mkcert) certificates or rely on Chrome's `--allow-insecure-localhost`.
 
    ```bash
    cd /home/jp/git/web-render/src
+   # No caching, HTTP only:
+   npx http-server . -c-1
+
+   # Or HTTPS with your own certs:
    npx http-server -S -C /path/to/cert.pem -K /path/to/key.pem
    ```
 
    Alternatively, use `npx serve --ssl-cert ...` or your preferred HTTPS dev server.
 
-2. Open `https://localhost:8080` (or whatever port you choose) in a Chromium browser with WebGPU enabled (Chrome 121+ ships it by default; otherwise enable `chrome://flags/#enable-unsafe-webgpu`).
+3. Open `http://localhost:8080` (or `https://localhost:8080` if you used TLS) in a Chromium browser with WebGPU enabled (Chrome 121+ ships it by default; otherwise enable `chrome://flags/#enable-unsafe-webgpu`).
 
-3. You should see the four mp4 streams filling the canvas. Open DevTools console to inspect logs coming from `src/main.js`.
+4. You should see the four mp4 streams filling the canvas. Open DevTools console to inspect logs coming from `src/main.js`.
 
 ## Structure
 

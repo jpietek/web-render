@@ -1,4 +1,4 @@
-const CONFIG_URL = './compose.json';
+const CONFIG_URL = window.__WEBGPU_CONFIG_URL__ || './compose.json';
 const LAYOUT_STRIDE = 256; // conservatively matches minUniformBufferOffsetAlignment for most GPUs
 const LAYOUT_FLOAT_BYTES = 48; // 12 floats per layout block (see shaders_v2.wgsl)
 const MSAA_SAMPLE_COUNT = 4;
