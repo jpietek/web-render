@@ -297,10 +297,26 @@ function applyLayoutBlocks(device, buffer, layers, canvasWidth, canvasHeight) {
 
 async function createVideoLayers(entries, defaultDurationSeconds) {
   const layers = [];
+  const sourceCache = new Map();
+
   for (const entry of entries) {
-    const source = new FrameResampler(entry);
-    await source.init();
+    const key = JSON.stringify({
+      url: entry.url,
+      loop: entry.loop ?? true,
+    });
+
+    let cached = sourceCache.get(key);
+    if (!cached) {
+      const source = new FrameResampler(entry);
+      const initPromise = source.init();
+      cached = { source, initPromise };
+      sourceCache.set(key, cached);
+    }
+
+    await cached.initPromise;
+    const source = cached.source;
     const aspect = typeof source.getAspect === 'function' ? source.getAspect() : null;
+
     layers.push({
       id: entry.id ?? crypto.randomUUID(),
       kind: 'video',
@@ -320,6 +336,7 @@ async function createVideoLayers(entries, defaultDurationSeconds) {
       timeline: normalizeTimeline(entry.time, defaultDurationSeconds),
     });
   }
+
   return layers;
 }
 
