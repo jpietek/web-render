@@ -1,7 +1,21 @@
 const CONFIG_URL = window.__WEBGPU_CONFIG_URL__ || './compose.json';
 const LAYOUT_STRIDE = 256; // conservatively matches minUniformBufferOffsetAlignment for most GPUs
 const LAYOUT_FLOAT_BYTES = 48; // 12 floats per layout block (see shaders_v2.wgsl)
-const MSAA_SAMPLE_COUNT = 4;
+const DEFAULT_MSAA_SAMPLE_COUNT = 4;
+
+// Simple A/B switches controllable via URL params, e.g.:
+//   ?msaa=0&maxVideos=4&overlays=0&htmlOverlay=0
+const urlParams = new URLSearchParams(window.location.search);
+const DEBUG_FLAGS = {
+  msaa: (urlParams.get('msaa') ?? '1') !== '0',
+  enableVideos: (urlParams.get('videos') ?? '1') !== '0',
+  maxVideoLayers: parseInt(urlParams.get('maxVideos') || '0', 10) || 0,
+  enableOverlays: (urlParams.get('overlays') ?? '1') !== '0',
+  enableHtmlOverlay: (urlParams.get('htmlOverlay') ?? '1') !== '0',
+};
+const MSAA_SAMPLE_COUNT = DEBUG_FLAGS.msaa ? DEFAULT_MSAA_SAMPLE_COUNT : 1;
+
+console.log('WebGPU debug flags', DEBUG_FLAGS);
 
 const recordButton = document.getElementById('record-button');
 
@@ -422,13 +436,17 @@ async function main() {
   });
 
   // Multisampled color buffer for anti-aliased geometry (e.g., rotated quads).
-  const msaaColorTexture = device.createTexture({
-    size: { width: canvasWidth, height: canvasHeight },
-    sampleCount: MSAA_SAMPLE_COUNT,
-    format: presentationFormat,
-    usage: GPUTextureUsage.RENDER_ATTACHMENT,
-  });
-  const msaaColorView = msaaColorTexture.createView();
+  let msaaColorTexture = null;
+  let msaaColorView = null;
+  if (MSAA_SAMPLE_COUNT > 1) {
+    msaaColorTexture = device.createTexture({
+      size: { width: canvasWidth, height: canvasHeight },
+      sampleCount: MSAA_SAMPLE_COUNT,
+      format: presentationFormat,
+      usage: GPUTextureUsage.RENDER_ATTACHMENT,
+    });
+    msaaColorView = msaaColorTexture.createView();
+  }
 
   // Recording: capture the canvas stream and dump a WebM matching the configured duration.
   if (recordButton) {
@@ -520,15 +538,24 @@ async function main() {
   device.queue.writeBuffer(vertexBuffer, 0, vertexData.buffer);
 
   log('Loading video grid via WebCodecs…');
-  const videoLayers = await createVideoLayers(config.videos ?? [], defaultTimelineSeconds);
+  let videoEntries = config.videos ?? [];
+  if (!DEBUG_FLAGS.enableVideos) {
+    videoEntries = [];
+    log('DEBUG: Video layers disabled via ?videos=0');
+  } else if (DEBUG_FLAGS.maxVideoLayers > 0 && videoEntries.length > DEBUG_FLAGS.maxVideoLayers) {
+    videoEntries = videoEntries.slice(0, DEBUG_FLAGS.maxVideoLayers);
+    log(`DEBUG: Limiting video layers to first ${DEBUG_FLAGS.maxVideoLayers}`);
+  }
+  const videoLayers = await createVideoLayers(videoEntries, defaultTimelineSeconds);
   log('Base video layers ready.');
 
-  const htmlOverlayConfig = config.htmlOverlay
-    ? {
-        ...config.htmlOverlay,
-        timeline: normalizeTimeline(config.htmlOverlay.time, defaultTimelineSeconds),
-      }
-    : null;
+  const htmlOverlayConfig =
+    DEBUG_FLAGS.enableHtmlOverlay && config.htmlOverlay
+      ? {
+          ...config.htmlOverlay,
+          timeline: normalizeTimeline(config.htmlOverlay.time, defaultTimelineSeconds),
+        }
+      : null;
 
   if (htmlOverlayConfig && htmlOverlayFrame) {
     htmlOverlayFrame.src = htmlOverlayConfig.url;
@@ -536,14 +563,17 @@ async function main() {
   }
 
   const overlayPages = [];
-  for (const page of config.overlayPages ?? []) {
-    overlayPages.push(await createOverlayPage(page, defaultTimelineSeconds));
+  if (DEBUG_FLAGS.enableOverlays) {
+    for (const page of config.overlayPages ?? []) {
+      overlayPages.push(await createOverlayPage(page, defaultTimelineSeconds));
+    }
   }
   if (overlayPages.length) {
     log(`Overlay pages loaded: ${overlayPages.map((p) => p.id).join(', ')}`);
   }
 
-  let activeOverlayPageId = new URLSearchParams(window.location.search).get('overlay') ?? overlayPages[0]?.id ?? null;
+  const overlayParam = new URLSearchParams(window.location.search).get('overlay');
+  let activeOverlayPageId = overlayParam ?? overlayPages[0]?.id ?? null;
 
   let layers = composeLayers(videoLayers, overlayPages, activeOverlayPageId);
   let layoutBufferSize = Math.max(1, layers.length) * LAYOUT_STRIDE;
@@ -628,30 +658,34 @@ async function main() {
   });
   const sampler = device.createSampler({ magFilter: 'linear', minFilter: 'linear' });
 
-  let lastRenderMs = performance.now();
   const timelineOriginMs = performance.now();
+  let lastFrameIndex = -1;
 
   function renderFrame(nowMs) {
-    if (nowMs - lastRenderMs < frameIntervalMs) {
+    const elapsedMs = nowMs - timelineOriginMs;
+    const frameIndex = Math.floor(elapsedMs / frameIntervalMs);
+    if (frameIndex <= lastFrameIndex) {
       requestAnimationFrame(renderFrame);
       return;
     }
-    lastRenderMs = nowMs;
-    const targetPtsUs = (nowMs - timelineOriginMs) * 1000;
+    lastFrameIndex = frameIndex;
+
+    const targetPtsUs = frameIndex * frameIntervalMs * 1000;
     const timelineSeconds = targetPtsUs / 1_000_000;
 
     const currentTextureView = context.getCurrentTexture().createView();
     const encoder = device.createCommandEncoder();
+    const colorAttachment = {
+      view: MSAA_SAMPLE_COUNT > 1 ? msaaColorView : currentTextureView,
+      loadOp: 'clear',
+      storeOp: 'store',
+      clearValue: { r: 0.015, g: 0.015, b: 0.025, a: 1 },
+    };
+    if (MSAA_SAMPLE_COUNT > 1) {
+      colorAttachment.resolveTarget = currentTextureView;
+    }
     const pass = encoder.beginRenderPass({
-      colorAttachments: [
-        {
-          view: msaaColorView,
-          resolveTarget: currentTextureView,
-          loadOp: 'clear',
-          storeOp: 'store',
-          clearValue: { r: 0.015, g: 0.015, b: 0.025, a: 1 },
-        },
-      ],
+      colorAttachments: [colorAttachment],
     });
     pass.setPipeline(pipeline);
     pass.setVertexBuffer(0, vertexBuffer);
